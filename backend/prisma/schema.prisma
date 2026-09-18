@@ -1,0 +1,534 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["stylist"]
+}
+
+enum AuthStatus {
+  LOGGED_IN @map("logged_in")
+  FAILED    @map("failed")
+  BLOCKED   @map("blocked")
+
+  @@schema("stylist")
+}
+
+enum Gender {
+  MALE   @map("male")
+  FEMALE @map("female")
+
+  @@schema("stylist")
+}
+
+enum AgeGroup {
+  UNDER_18            @map("under_18")
+  EIGHTEEN_TO_24      @map("eighteen_to_24")
+  TWENTY_FIVE_TO_34   @map("twenty_five_to_34")
+  THIRTY_FIVE_TO_44   @map("thirty_five_to_44")
+  FORTY_FIVE_OR_OLDER @map("forty_five_or_older")
+
+  @@schema("stylist")
+}
+
+enum SkinTone {
+  VERY_LIGHT      @map("very_light")
+  LIGHT           @map("light")
+  LIGHT_TO_MEDIUM @map("light_to_medium")
+  WHEATISH        @map("wheatish")
+  OLIVE           @map("olive")
+  DARK            @map("dark")
+  UNSURE          @map("unsure")
+
+  @@schema("stylist")
+}
+
+enum SkinUndertone {
+  WARM    @map("warm")
+  COOL    @map("cool")
+  NEUTRAL @map("neutral")
+  UNSURE  @map("unsure")
+
+  @@schema("stylist")
+}
+
+enum BodyShape {
+  MALE_TRAPEZOID         @map("male_trapezoid")
+  MALE_TRIANGLE          @map("male_triangle")
+  MALE_RECTANGLE         @map("male_rectangle")
+  MALE_OVAL              @map("male_oval")
+  MALE_INVERTED_TRIANGLE @map("male_inverted_triangle")
+
+  FEMALE_HOURGLASS         @map("female_hourglass")
+  FEMALE_APPLE             @map("female_apple")
+  FEMALE_PEAR              @map("female_pear")
+  FEMALE_RECTANGLE         @map("female_rectangle")
+  FEMALE_INVERTED_TRIANGLE @map("female_inverted_triangle")
+
+  UNSURE @map("unsure")
+
+  @@schema("stylist")
+}
+
+enum FavoriteStyle {
+  CASUAL_AND_DAILY @map("casual_and_daily")
+  MINIMAL @map("minimal")
+  CLASSIC @map("classic")
+  FORMAL  @map("formal")
+  SPORT  @map("sport")
+  STREET @map("street")
+  FEMALE_ARITISTIC_AND_CREATIVE @map("female_artistic_and_creative")
+  FEMALE_ROMANTIC_AND_ELEGANT @map("female_romantic_and_elegant")
+  MALE_SMART_AND_CASUAL @map("male_smart_and_casual")
+  MALE_ROMANTIC_AND_DIFFERENT @map("male_romantic_and_different")
+
+  @@schema("stylist")
+}
+
+enum DislikedColor {
+  BLACK @map("black")
+  WHITE_AND_CREAMY @map("white_and_creamy")
+  BROWN @map("brown")
+  RED_AND_ORANGE @map("red_and_orange")
+  PINK @map("pink")
+  YELLOW @map("yellow")
+  GREEN @map("green")
+  BLUE @map("blue")
+  PURPLE @map("purple")
+
+  @@schema("stylist")
+}
+
+enum FavoriteColorPalette {
+  NEUTRAL_BLACK_WHITE_GRAY @map("neutral_black_white_gray")
+  CREAM_AND_BROWN @map("cream_and_brown")
+  PASTELS @map("pastels")
+  DARK @map("male_dark")
+  LIGHT_AND_BRIGHT @map("male_light_and_bright")
+
+  MALE_BLUE_AND_NAVY_BLUES @map("male_blue_and_navy_blues")
+  MALE_GREEN_AND_OLIVE @map("male_green_and_olive")
+  MALE_WARM_AND_KHAKI @map("male_warm_and_khaki")
+
+  FEMALE_WARM_RED_ORANGE_BRIGHT_ORANGE @map("female_warm_red_orange_bright_orange")
+  FEMALE_COLD_BLUE_PURPLE_GREEN @map("female_cold_blue_purple_green")
+
+  @@schema("stylist")
+}
+
+/// Q6 — same bank for men and women
+enum Occasion {
+  DAILY              @map("daily")
+  UNIVERSITY         @map("university")
+  WORK               @map("work")
+  FRIENDS_GATHERING  @map("friends_gathering")
+  PARTY              @map("party")
+  DATE_CAFE          @map("date_cafe")
+  FORMAL_EVENT       @map("formal_event")
+  TRAVEL             @map("travel")
+
+  @@schema("stylist")
+}
+
+/// Q7 — same bank for men and women
+enum Season {
+  SPRING     @map("spring")
+  SUMMER     @map("summer")
+  FALL       @map("fall")
+  WINTER     @map("winter")
+  ALL_SEASON @map("all_season")
+
+  @@schema("stylist")
+}
+
+/// Q9 — shared fits + gendered combo options
+enum FitPreference {
+  LOOSE       @map("loose")
+  SEMI_LOOSE  @map("semi_loose")
+  BALANCED    @map("balanced")
+  FITTED      @map("fitted")
+
+  /// women: بالاتنه آزاد + پایین‌تنه جذب
+  LOOSE_TOP_FITTED_BOTTOM @map("loose_top_fitted_bottom")
+  /// women: بالاتنه جذب + پایین‌تنه آزاد
+  FITTED_TOP_LOOSE_BOTTOM @map("fitted_top_loose_bottom")
+
+  /// men: بالاتنه آزاد + شلوار متعادل
+  LOOSE_TOP_BALANCED_BOTTOM @map("loose_top_balanced_bottom")
+  /// men: بالاتنه متعادل + شلوار آزاد
+  BALANCED_TOP_LOOSE_BOTTOM @map("balanced_top_loose_bottom")
+
+  @@schema("stylist")
+}
+
+/// Q10 women — میزان پوشیدگی
+enum CoverageLevel {
+  FULLY_COVERED        @map("fully_covered")
+  COVERED_COMFORTABLE  @map("covered_comfortable")
+  BALANCED             @map("balanced")
+  UNRESTRICTED         @map("unrestricted")
+
+  @@schema("stylist")
+}
+
+/// Q10 men — میزان رسمی‌بودن
+enum FormalityLevel {
+  VERY_CASUAL   @map("very_casual")
+  MOSTLY_CASUAL  @map("mostly_casual")
+  BALANCED       @map("balanced")
+  SMART_CASUAL   @map("smart_casual")
+  FORMAL         @map("formal")
+
+  @@schema("stylist")
+}
+
+/// Q13 — shared + gendered wardrobe palette banks
+enum WardrobePalette {
+  BLACK_WHITE_GRAY  @map("black_white_gray")
+  CREAM_BEIGE_BROWN @map("cream_beige_brown")
+  MIXED_ALL         @map("mixed_all")
+
+  /// women
+  FEMALE_BLUE_AND_NAVY    @map("female_blue_and_navy")
+  FEMALE_PASTELS          @map("female_pastels")
+  FEMALE_WARM_AND_EARTHY  @map("female_warm_and_earthy")
+  FEMALE_BRIGHT_AND_VARIED @map("female_bright_and_varied")
+
+  /// men
+  MALE_BLUE_NAVY_GRAY     @map("male_blue_navy_gray")
+  MALE_GREEN_OLIVE_EARTHY @map("male_green_olive_earthy")
+  MALE_DARK               @map("male_dark")
+  MALE_LIGHT_AND_BRIGHT   @map("male_light_and_bright")
+
+  @@schema("stylist")
+}
+
+/// Q14 — gendered wardrobe item banks (+ prefer_all_new)
+enum WardrobeItemType {
+  PREFER_ALL_NEW @map("prefer_all_new")
+
+  JEANS    @map("jeans")
+  TROUSERS @map("trousers")
+  SNEAKERS @map("sneakers")
+  BLAZER_OR_COAT @map("blazer_or_coat")
+
+  /// women
+  MANTO_OR_LONG_COAT @map("manto_or_long_coat")
+  BLOUSE_OR_SHIRT    @map("blouse_or_shirt")
+  TSHIRT_OR_TOP      @map("tshirt_or_top")
+  SKIRT              @map("skirt")
+  FORMAL_OR_HEELS    @map("formal_or_heels")
+  CASUAL_BAG         @map("casual_bag")
+
+  /// men
+  TSHIRT                     @map("tshirt")
+  POLO                       @map("polo")
+  DRESS_SHIRT                @map("dress_shirt")
+  HOODIE_OR_SWEATSHIRT       @map("hoodie_or_sweatshirt")
+  KNIT_OR_SWEATER            @map("knit_or_sweater")
+  DENIM_JACKET_OR_OVERSHIRT  @map("denim_jacket_or_overshirt")
+  CARGO_PANTS                @map("cargo_pants")
+  FORMAL_OR_LOAFERS          @map("formal_or_loafers")
+
+  @@schema("stylist")
+}
+
+/// Q15 — shared levels + gender-specific last option
+enum ExplorationLevel {
+  FAMILIAR     @map("familiar")
+  SLIGHTLY_NEW @map("slightly_new")
+  MIXED        @map("mixed")
+  CREATIVE     @map("creative")
+  /// women
+  UNSURE @map("unsure")
+  /// men
+  BOLD @map("bold")
+
+  @@schema("stylist")
+}
+
+/// Outfit template / item placement slot
+enum ClothingSlot {
+  TOP       @map("top")
+  BOTTOM    @map("bottom")
+  OUTERWEAR @map("outerwear")
+  SHOES     @map("shoes")
+  ACCESSORY @map("accessory")
+
+  @@schema("stylist")
+}
+
+/// Catalog color family for scoring / disliked-color filtering
+enum ColorFamily {
+  BLACK        @map("black")
+  WHITE_CREAM  @map("white_cream")
+  GRAY         @map("gray")
+  CREAM_BEIGE  @map("cream_beige")
+  BROWN        @map("brown")
+  NAVY         @map("navy")
+  BLUE         @map("blue")
+  GREEN_OLIVE  @map("green_olive")
+  KHAKI_EARTH  @map("khaki_earth")
+  RED_ORANGE   @map("red_orange")
+  PINK         @map("pink")
+  YELLOW       @map("yellow")
+  PURPLE       @map("purple")
+  PASTEL       @map("pastel")
+  BRIGHT       @map("bright")
+  DARK         @map("dark")
+
+  @@schema("stylist")
+}
+
+/// Item-level fit (not user combo preferences)
+enum ItemFit {
+  LOOSE      @map("loose")
+  SEMI_LOOSE @map("semi_loose")
+  BALANCED   @map("balanced")
+  FITTED     @map("fitted")
+
+  @@schema("stylist")
+}
+
+/// Concrete catalog garment type (maps to WardrobeItemType where possible)
+enum ClothingItemType {
+  /// women outer / tops
+  MANTO          @map("manto")
+  LONG_COAT      @map("long_coat")
+  BLOUSE         @map("blouse")
+  TOP            @map("top")
+  SKIRT          @map("skirt")
+  HEELS          @map("heels")
+  CASUAL_BAG     @map("casual_bag")
+
+  /// shared-ish
+  BLAZER         @map("blazer")
+  SHIRT          @map("shirt")
+  TSHIRT         @map("tshirt")
+  JEANS          @map("jeans")
+  TROUSERS       @map("trousers")
+  SNEAKERS       @map("sneakers")
+  FORMAL_SHOES   @map("formal_shoes")
+
+  /// men
+  POLO                       @map("polo")
+  HOODIE                     @map("hoodie")
+  SWEATSHIRT                 @map("sweatshirt")
+  KNIT                       @map("knit")
+  SWEATER                    @map("sweater")
+  DENIM_JACKET               @map("denim_jacket")
+  OVERSHIRT                  @map("overshirt")
+  CARGO_PANTS                @map("cargo_pants")
+  LOAFERS                    @map("loafers")
+
+  /// accessories (not in Q14 banks; used in templates)
+  WATCH      @map("watch")
+  BELT       @map("belt")
+  GLASSES    @map("glasses")
+  HAT        @map("hat")
+  BAG        @map("bag")
+  JEWELRY    @map("jewelry")
+  TIE_OR_BOW @map("tie_or_bow")
+  SCARF      @map("scarf")
+
+  @@schema("stylist")
+}
+
+/// Soft body-shape / cut tags (low weight in scoring; not hard filters)
+enum SilhouetteTag {
+  A_LINE               @map("a_line")
+  WIDE_LEG             @map("wide_leg")
+  STRAIGHT_LEG         @map("straight_leg")
+  TAPERED              @map("tapered")
+  STRUCTURED_SHOULDER  @map("structured_shoulder")
+  SOFT_SHOULDER        @map("soft_shoulder")
+  DEFINED_WAIST        @map("defined_waist")
+  RELAXED_WAIST        @map("relaxed_waist")
+  LONG_LINE            @map("long_line")
+  CROPPED              @map("cropped")
+  FITTED_TOP           @map("fitted_top")
+  LOOSE_TOP            @map("loose_top")
+  LAYERABLE            @map("layerable")
+  VOLUME_BOTTOM        @map("volume_bottom")
+  SLIM_BOTTOM          @map("slim_bottom")
+
+  @@schema("stylist")
+}
+
+/// How adventurous an item feels; matched softly to ExplorationLevel (Q15)
+enum NoveltyLevel {
+  FAMILIAR     @map("familiar")
+  SLIGHTLY_NEW @map("slightly_new")
+  MIXED        @map("mixed")
+  CREATIVE     @map("creative")
+  BOLD         @map("bold")
+
+  @@schema("stylist")
+}
+
+model ClothingItem {
+  id     Int    @id @default(autoincrement()) @db.Integer
+  slug   String @unique @map("slug") @db.VarChar(120)
+  nameEn String @map("name_en") @db.VarChar(150)
+  nameFa String @map("name_fa") @db.VarChar(150)
+
+  gender   Gender           @map("gender")
+  slot     ClothingSlot     @map("slot")
+  itemType ClothingItemType @map("item_type")
+
+  styles    FavoriteStyle[] @map("styles")
+  occasions Occasion[]      @map("occasions")
+  seasons   Season[]        @map("seasons")
+
+  fit      ItemFit         @map("fit")
+  /// women-relevant; null for items where coverage does not apply
+  coverage CoverageLevel?  @map("coverage")
+  formality FormalityLevel @map("formality")
+  bodyShapes BodyShape[]   @map("body_shapes")
+  silhouetteTags SilhouetteTag[] @default([]) @map("silhouette_tags")
+
+  novelty NoveltyLevel @map("novelty")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+
+  // relations
+  recommendationOutfitItems RecommendationOutfitItem[]
+
+  @@index([gender])
+  @@map("clothing_item")
+  @@schema("stylist")
+}
+
+enum OutfitIntent {
+  BEST_MATCH  @map("best_match")
+  ALTERNATIVE @map("alternative")
+  ADVENTUROUS @map("adventurous")
+
+  @@schema("stylist")
+}
+
+model RecommendationRequest {
+  id     Int @id @default(autoincrement()) @db.Integer
+  userId Int @map("user_id") @db.Integer
+
+  occasion       Occasion      @map("occasion")
+  season         Season        @map("season")
+  fitPreference  FitPreference @map("fit_preference")
+  /// required for women at API layer
+  coverageLevel  CoverageLevel?  @map("coverage_level")
+  /// required for men at API layer
+  formalityLevel FormalityLevel? @map("formality_level")
+  wardrobePalette WardrobePalette @map("wardrobe_palette")
+  /// max 5
+  wardrobeItems    WardrobeItemType[] @map("wardrobe_items")
+  explorationLevel ExplorationLevel  @map("exploration_level")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
+
+  // relations
+  user    User                   @relation(fields: [userId], references: [id])
+  outfits RecommendationOutfit[]
+
+  @@index([userId, createdAt])
+  @@map("recommendation_request")
+  @@schema("stylist")
+}
+
+model RecommendationOutfit {
+  id        Int @id @default(autoincrement()) @db.Integer
+  requestId Int @map("request_id") @db.Integer
+
+  rank         Int          @map("rank") @db.SmallInt
+  intent       OutfitIntent @map("intent")
+  score        Float        @map("score")
+  explanation  String       @map("explanation") @db.Text
+  noveltyLevel NoveltyLevel @map("novelty_level")
+
+  // relations
+  request RecommendationRequest      @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  items   RecommendationOutfitItem[]
+
+  @@unique([requestId, rank])
+  @@map("recommendation_outfit")
+  @@schema("stylist")
+}
+
+model RecommendationOutfitItem {
+  id             Int @id @default(autoincrement()) @db.Integer
+  outfitId       Int @map("outfit_id") @db.Integer
+  clothingItemId Int @map("clothing_item_id") @db.Integer
+
+  slot ClothingSlot @map("slot")
+  /// color assigned by color engine at recommend time (not stored on ClothingItem)
+  colorFamily  ColorFamily @map("color_family")
+  isOwnedReuse Boolean     @default(false) @map("is_owned_reuse")
+
+  // relations
+  outfit       RecommendationOutfit @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+  clothingItem ClothingItem         @relation(fields: [clothingItemId], references: [id])
+
+  @@index([outfitId])
+  @@map("recommendation_outfit_item")
+  @@schema("stylist")
+}
+
+model User {
+  id           Int               @id @default(autoincrement()) @db.Integer
+  firstName    String            @map("first_name") @db.VarChar(100)
+  lastName     String            @map("last_name") @db.VarChar(100)
+  mobileNumber String            @unique @map("mobile_number") @db.VarChar(11)
+  gender       Gender?           @map("gender")
+  ageGroup     AgeGroup?         @map("age_group")
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamp()
+  // relations
+  auth                   Authentication?
+  styleProfile           UserStyleProfile?
+  recommendationRequests RecommendationRequest[]
+
+  @@map("user")
+  @@schema("stylist")
+}
+
+model UserStyleProfile {
+  id                    Int                    @id @default(autoincrement()) @db.Integer
+  userId                Int                    @unique @map("user_id") @db.Integer
+  skinTone              SkinTone?              @map("skin_tone")
+  skinUndertone         SkinUndertone?         @map("skin_undertone")
+  bodyShape             BodyShape?             @map("body_shape")
+  /// max 2
+  favoriteStyles        FavoriteStyle[]        @map("favorite_styles")
+  /// max 3
+  favoriteColorPalettes FavoriteColorPalette[] @map("favorite_color_palettes")
+  /// max 3; empty = none (Prisma does not support nullable arrays)
+  dislikedColors        DislikedColor[]        @default([]) @map("disliked_colors")
+  createdAt             DateTime               @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt             DateTime               @updatedAt @map("updated_at") @db.Timestamp()
+  // relations
+  user                  User                   @relation(fields: [userId], references: [id])
+
+  @@map("user_style_profile")
+  @@schema("stylist")
+}
+
+model Authentication {
+  id           Int        @id @default(autoincrement())
+  userId       Int        @unique @map("user_id") @db.Integer
+  passwordHash String     @map("password_hash") @db.Text
+  lastLoginAt  DateTime?  @map("last_login_at") @db.Timestamp()
+  lockedUntil  DateTime?  @map("locked_until") @db.Timestamp()
+  attempts     Int        @map("attempts") @db.SmallInt
+  status       AuthStatus @map("status")
+  // relations
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@map("authentication")
+  @@schema("stylist")
+}
