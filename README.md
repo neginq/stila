@@ -1,4 +1,4 @@
-# Stila — Personal Style & Outfit Recommendation System
+# Stila : Personal Style & Outfit Recommendation System
 
 Stila is a web-based personal style and outfit recommendation system developed as a Bachelor's Project in Computer Engineering at Shahid Beheshti University.
 
